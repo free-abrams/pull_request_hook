@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Http;
 
 class PushDeer
 {
-    private $url = 'https://api2.pushdeer.com/message/push?pushkey=key&text=';
+    private $url = 'https://api2.pushdeer.com/message/push';
 
     public function push(string $text,string $desp = '', $type='text', $key = '[PUSHKEY]')
     {
@@ -21,17 +21,13 @@ class PushDeer
         return $result = file_get_contents('https://api2.pushdeer.com/message/push', false, $context);
     }
 
-    public function request($key, $msg)
+    public function request($key, $msg, $desp)
     {
-        $param = [
-            'pushkey' => $key,
-            'text' => $msg,
-        ];
-        $query = '';
-
         $request = Http::asForm()->post($this->url, [
-
+            'text' => $msg,
+            'desp' => $desp,
+            'pushkey' => $key
         ]);
-
+        return $request;
     }
 }
