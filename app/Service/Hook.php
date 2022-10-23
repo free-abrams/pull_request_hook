@@ -45,7 +45,7 @@ class Hook
 
         $txt = $auth.'推送到了 分支:'.$branch.' 于 ';
         $keys = Config('pushDeer.keys');
-        (new PushDeer())->push($txt, '无', 'text', $keys);
+        $res = (new PushDeer())->push($txt, '无', 'text', json_encode($keys));
         return $this->{$method}($param);
     }
 

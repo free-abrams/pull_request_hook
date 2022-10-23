@@ -8,7 +8,7 @@ class PushDeer
 {
     private $url = 'https://api2.pushdeer.com/message/push?pushkey=key&text=';
 
-    public function push($text, $desp = '', $type='text', $key = '[PUSHKEY]')
+    public function push(string $text,string $desp = '', $type='text', $key = '[PUSHKEY]')
     {
         $postdata = http_build_query(array( 'text' => $text, 'desp' => $desp, 'type' => $type , 'pushkey' => $key ));
         $opts = array('http' =>
