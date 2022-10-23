@@ -10,7 +10,7 @@ class GithubService
 {
     private $config;
 
-    private $cmd = 'git pull 2>&1';
+    private $cmd = 'git pull.rebase false 2>&1';
 
     public function __construct($config)
     {
@@ -28,10 +28,7 @@ class GithubService
 
         $exe = implode(' && ', $cmd);
 
-        $res =  shell_exec($exe);
-        dump($exe);
-        dump($res);
-        return $res;
+        return shell_exec($exe);
     }
 
     public function pullRequest($param)
