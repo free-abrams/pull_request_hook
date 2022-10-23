@@ -3,6 +3,7 @@
 namespace App\Service\Github;
 
 use App\Service\Git;
+use Illuminate\Support\Facades\Request;
 
 class GithubService
 {
@@ -13,6 +14,9 @@ class GithubService
     public function __construct($config)
     {
         $this->config = $config;
+        if (Request::method() !== $this->config['method']) {
+            throw new \Exception('unSupport method '.Request::method());
+        }
     }
 
     public function pullEvent()
