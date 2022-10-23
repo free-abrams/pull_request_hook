@@ -62,3 +62,14 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+### 执行前确认 /home/www 这个目录存在
+```php
+sudo -u www ssh-keygen -t ed25519 -C "XXXXXX@XXXXX.com"
+
+```
+### 克隆仓库后 ./.git 给 www 用户权限
+```php
+chwon -R www www/
+```

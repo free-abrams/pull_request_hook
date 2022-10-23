@@ -10,7 +10,7 @@ class GithubService
 {
     private $config;
 
-    private $cmd = 'git pull.rebase false 2>&1';
+    private $cmd = 'git pull --rebase 2>&1';
 
     public function __construct($config)
     {
