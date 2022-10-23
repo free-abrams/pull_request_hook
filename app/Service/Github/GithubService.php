@@ -10,7 +10,7 @@ class GithubService
 {
     private $config;
 
-    private $cmd = 'git pull';
+    private $cmd = 'git pull 2>&1';
 
     public function __construct($config)
     {
@@ -27,8 +27,11 @@ class GithubService
         $cmd[] = $this->cmd;
 
         $exe = implode(' && ', $cmd);
-dump($exe);
-        return shell_exec($exe);
+
+        $res =  shell_exec($exe);
+        dump($exe);
+        dump($res);
+        return $res;
     }
 
     public function pullRequest($param)

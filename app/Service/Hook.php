@@ -46,6 +46,6 @@ class Hook
             $this->driver();
         }
 
-        (new $this->provider($this->config))->{$name}(...$arguments);
+        return (new $this->provider($this->config))->{$name}(...$arguments);
     }
 }
