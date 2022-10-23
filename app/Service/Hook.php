@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use Illuminate\Support\Str;
+
 class Hook
 {
     private $config;
@@ -32,12 +34,18 @@ class Hook
         return $this;
     }
 
+    public function handel($event, $param)
+    {
+        $method = Str::camel($event);
+        return $this->{$method}($param);
+    }
+
     public function __call($name, $arguments)
     {
         if ($this->provider === null) {
             $this->driver();
         }
 
-        (new $this->provider($this->config))->{$name}();
+        (new $this->provider($this->config))->{$name}(...$arguments);
     }
 }
