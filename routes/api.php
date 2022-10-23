@@ -20,4 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::any('/hook', '\App\Http\Controllers\Controller@hook');
 
-Route::any('/hook', '\App\Http\Controllers\Controller@gitee');
+Route::any('/gitee', '\App\Http\Controllers\Controller@gitee');
