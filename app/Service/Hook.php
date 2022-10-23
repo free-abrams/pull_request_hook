@@ -37,6 +37,7 @@ class Hook
     public function handel($event, $param)
     {
         $method = Str::camel($event);
+        // 这里可以加推送
         return $this->{$method}($param);
     }
 

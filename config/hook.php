@@ -12,12 +12,12 @@ return [
         'gitee' => [
             'driver' => \App\Service\Gitee\GiteeService::class,
             'method' => 'POST',
-            'path' => env('HOOK_PATH', '/Users/yangfeng/Desktop/hook/hook_test'),
+            'path' => '/data/wwwroot/gitee_hook_test',
         ],
         'github' => [
             'driver' => \App\Service\Github\GithubService::class,
             'method' => 'POST',
-            'path' => env('HOOK_PATH', '/data/wwwroot/hook_test'),
+            'path' => '/data/wwwroot/hook_test',
         ],
     ],
 

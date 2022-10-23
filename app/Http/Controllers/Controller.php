@@ -41,4 +41,30 @@ class Controller extends BaseController
             return Response::json(['code' => 400, 'msg' => $e->getMessage(), 'data' => []]);
         }
     }
+
+    public function gitee(Request $request)
+    {
+        $param = $request->all();
+        $param['event'] = $request->header('X-GitHub-Event');
+
+        $validate = Validator::make($param, [
+            'event' => Rule::in(['push', 'pull_request']),
+            'action' => ['nullable', Rule::in(['closed', 'opened'])]
+        ]);
+
+        if ($validate->fails()) {
+            return Response::json([
+                'code' => 401,
+                'msg' => $validate->errors()->first(),
+                'data' => []
+            ]);
+        }
+
+        try {
+            $res = (new Hook())->driver('gitee')->handel($param['event'], $param);
+            return Response::json(['code' => 400, 'msg' => 'SUCCESS', 'data' => $res]);
+        } catch (\Exception $e) {
+            return Response::json(['code' => 400, 'msg' => $e->getMessage(), 'data' => []]);
+        }
+    }
 }
