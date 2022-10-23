@@ -3,40 +3,41 @@
 namespace App\Service\Gitee;
 
 use App\Service\Git;
+use Illuminate\Support\Facades\Request;
 
-class GiteeService implements Git
+class GiteeService
 {
+    private $config;
 
-    private $app;
+    private $cmd = 'git pull --rebase 2>&1';
 
-    private $dirver;
-
-    public function __construct($app)
+    public function __construct($config)
     {
-        $this->app = $app;
-    }
-
-    public function driver($name = null)
-    {
-        if ($name === null) {
-            $name = $this->getDefaultDriver();
+        $this->config = $config;
+        if (Request::method() !== $this->config['method']) {
+            throw new \Exception('unsupported method '.Request::method());
         }
-
-        $this->dirver = $name;
     }
 
-    public function getDefaultDriver()
+    public function pushHook($param)
     {
-        return config('hook.driver.default');
+        $cmd = [];
+        $cmd[] = 'cd '.$this->config['path'];
+        $cmd[] = $this->cmd;
+
+        $exe = implode(' && ', $cmd);
+
+        return shell_exec($exe);
     }
 
-    public function pullEvent()
+    public function mergeRequestHook($param)
     {
-        // TODO: Implement pullEvent() method.
-    }
+        $cmd = [];
+        $cmd[] = 'cd '.$this->config['path'];
+        $cmd[] = $this->cmd;
 
-    public function pullRequestEvent()
-    {
-        // TODO: Implement pullRequestEvent() method.
+        $exe = implode(' && ', $cmd);
+
+        return shell_exec($exe);
     }
 }

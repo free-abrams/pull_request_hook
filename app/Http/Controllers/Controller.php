@@ -45,11 +45,10 @@ class Controller extends BaseController
     public function gitee(Request $request)
     {
         $param = $request->all();
-        $param['event'] = $request->header('X-GitHub-Event');
+        $param['event'] = $request->header('X-Gitee-Event');
 
         $validate = Validator::make($param, [
-            'event' => Rule::in(['push', 'pull_request']),
-            'action' => ['nullable', Rule::in(['closed', 'opened'])]
+            'event' => Rule::in(['Push Hook', 'Merge Request Hook']),
         ]);
 
         if ($validate->fails()) {
