@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Service\PushDeer\PushDeer;
 use Illuminate\Support\Str;
 
 class Hook
@@ -38,6 +39,13 @@ class Hook
     {
         $method = Str::camel($event);
         // 这里可以加推送
+        $auth = '';
+        $branch = '';
+        $time = '';
+
+        $txt = $auth.'推送到了 分支:'.$branch.' 于 ';
+        $keys = Config('pushDeer.keys');
+        (new PushDeer())->push($txt, '无', 'text', $keys);
         return $this->{$method}($param);
     }
 
