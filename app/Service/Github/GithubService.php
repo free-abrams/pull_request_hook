@@ -27,7 +27,7 @@ class GithubService
         $cmd[] = $this->cmd;
 
         $exe = implode(' && ', $cmd);
-
+dump($exe);
         return shell_exec($exe);
     }
 
