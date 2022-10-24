@@ -46,8 +46,9 @@ class Hook
         $time = Carbon::create($time);
         $txt = $auth.'推送到了 分支:'.$branch.' 于 '.$time;
         $keys = Config('pushDeer.keys');
+        $key = implode(',', $keys);
         //$res = (new PushDeer())->push($txt, '无', 'text', json_encode($keys));
-        $res = (new Pushdeer())->request('PDU15776TzsxyrlU98msSZAtTgGr0aJ1jMcxIBxlT', $txt, $desp = '无');
+        $res = (new Pushdeer())->request($key, $txt, $desp = '无');
         return $this->{$method}($param);
     }
 
