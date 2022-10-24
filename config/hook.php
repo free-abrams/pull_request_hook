@@ -8,6 +8,8 @@ return [
             'path' => env('HOOK_PATH', 'path'),
         ],
 
+    'token' => env('HOOK_TOKEN', ''),
+
     'drivers' => [
         'gitee' => [
             'driver' => \App\Service\Gitee\GiteeService::class,

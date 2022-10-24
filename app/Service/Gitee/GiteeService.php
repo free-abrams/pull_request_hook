@@ -6,20 +6,15 @@ use Illuminate\Support\Facades\Request;
 
 class GiteeService
 {
-    private $config;
-
     private $cmd = 'git pull --rebase 2>&1';
 
-    public function __construct($config)
+    public function pushHooks($param)
     {
-        $this->config = $config;
-        if (Request::method() !== $this->config['method']) {
-            throw new \Exception('unsupported method '.Request::method());
+        $res = $this->checkToken('123456', $param);
+        if ($res === false) {
+            throw new \Exception('unknow token get');
         }
-    }
 
-    public function pushHook($param)
-    {
         $cmd = [];
         $cmd[] = 'cd '.$this->config['path'];
         $cmd[] = $this->cmd;
@@ -38,5 +33,19 @@ class GiteeService
         $exe = implode(' && ', $cmd);
 
         return shell_exec($exe);
+    }
+
+    private function checkToken($token, $param): bool
+    {
+        $sign = $param['sign'];
+        $timestamp = $param['timestamp'];
+
+        $secret_str = "{$timestamp}\n{$token}";
+        $compute_token = base64_encode(hash_hmac('sha256', $secret_str, $token, true));
+        if ($sign !== $compute_token) {
+            return false;
+        }
+
+        return true;
     }
 }

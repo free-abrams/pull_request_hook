@@ -46,10 +46,10 @@ class Controller extends BaseController
     public function gitee(Request $request)
     {
         $param = $request->all();
-        $param['event'] = $request->header('X-Gitee-Event');
-
+        $param['heads'] = $request->headers->all();
         $validate = Validator::make($param, [
-            'event' => Rule::in(['Push Hook', 'Merge Request Hook']),
+            'hook_name' => Rule::in(['push_hooks', 'merge_request_hooks']),
+            'heads.x-gitee-timestamp' => 'required',
         ]);
 
         if ($validate->fails()) {
@@ -61,7 +61,7 @@ class Controller extends BaseController
         }
 
         try {
-            $res = (new Hook())->driver('gitee')->handel($param['event'], $param);
+            $res = (new Hook())->driver('gitee')->handel($param['hook_name'], $param);
             return Response::json(['code' => 200, 'msg' => 'SUCCESS', 'data' => $res]);
         } catch (\Exception $e) {
             return Response::json(['code' => 400, 'msg' => $e->getMessage(), 'data' => []]);
