@@ -2,7 +2,6 @@
 
 namespace App\Service\Gitee;
 
-use App\Service\Git;
 use Illuminate\Support\Facades\Request;
 
 class GiteeService

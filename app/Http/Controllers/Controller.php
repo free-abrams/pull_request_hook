@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Service\Hook;
+use App\Service\Message;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -61,9 +62,15 @@ class Controller extends BaseController
 
         try {
             $res = (new Hook())->driver('gitee')->handel($param['event'], $param);
-            return Response::json(['code' => 400, 'msg' => 'SUCCESS', 'data' => $res]);
+            return Response::json(['code' => 200, 'msg' => 'SUCCESS', 'data' => $res]);
         } catch (\Exception $e) {
             return Response::json(['code' => 400, 'msg' => $e->getMessage(), 'data' => []]);
         }
+    }
+
+    public function testStatic()
+    {
+        $param = \Illuminate\Support\Facades\Request::all();
+        return Message::gitee()->generatePushHook($param);
     }
 }

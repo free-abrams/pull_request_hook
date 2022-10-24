@@ -40,15 +40,8 @@ class Hook
     {
         $method = Str::camel($event);
         // 这里可以加推送
-        $auth = $param['pusher']['name'];
-        $branch = $param['ref'];
-        $time = $param['repository']['created_at'];
-        $time = Carbon::create($time);
-        $txt = $auth.'推送到了 分支:'.$branch.' 于 '.$time;
-        $keys = Config('pushDeer.keys');
-        $key = implode(',', $keys);
-        //$res = (new PushDeer())->push($txt, '无', 'text', json_encode($keys));
-        $res = (new Pushdeer())->request($key, $txt, $desp = '无');
+        (new PushDeer())->push($method, $param);
+
         return $this->{$method}($param);
     }
 
