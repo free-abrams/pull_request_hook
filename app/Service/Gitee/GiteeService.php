@@ -8,15 +8,10 @@ class GiteeService
 {
     private $cmd = 'git pull --rebase 2>&1';
 
-    public function pushHooks($param)
+    public function pushHooks($param, string $path)
     {
-        $res = $this->checkToken('123456', $param);
-        if ($res === false) {
-            throw new \Exception('unknow token get');
-        }
-
         $cmd = [];
-        $cmd[] = 'cd '.$this->config['path'];
+        $cmd[] = 'cd '.$path;
         $cmd[] = $this->cmd;
 
         $exe = implode(' && ', $cmd);
@@ -24,10 +19,10 @@ class GiteeService
         return shell_exec($exe);
     }
 
-    public function mergeRequestHook($param)
+    public function tagPushHooks($param, string $path)
     {
         $cmd = [];
-        $cmd[] = 'cd '.$this->config['path'];
+        $cmd[] = 'cd '.$path;
         $cmd[] = $this->cmd;
 
         $exe = implode(' && ', $cmd);
@@ -35,17 +30,16 @@ class GiteeService
         return shell_exec($exe);
     }
 
-    private function checkToken($token, $param): bool
+    public function mergeRequestHooks($param, string $path)
     {
-        $sign = $param['sign'];
-        $timestamp = $param['timestamp'];
+        $cmd = [];
+        $cmd[] = 'cd '.$path;
+        $cmd[] = $this->cmd;
 
-        $secret_str = "{$timestamp}\n{$token}";
-        $compute_token = base64_encode(hash_hmac('sha256', $secret_str, $token, true));
-        if ($sign !== $compute_token) {
-            return false;
-        }
+        $exe = implode(' && ', $cmd);
 
-        return true;
+        return shell_exec($exe);
     }
+
+
 }

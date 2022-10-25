@@ -19,15 +19,12 @@ class PushDeer
         return $request;
     }
 
-    public function push($event, $param)
+    public function push($event, $param, $driver)
     {
-        $auth = Message::getAuth($event, $param);
-        $branch = Message::getRef($event, $param);
-        $time = Message::getCreatedAt($event, $param);
+        $param = (new Message)->driver($driver)->handel($event, $param);
 
-        $txt = $auth.' 推送到了 分支:'.$branch.' 于 '.$time;
         $keys = Config('pushDeer.keys');
         $key = implode(',', $keys);
-        return $this->request($key, $txt, $desp = '无');
+        return $this->request($key, $param['title'], $desp = $param['desp']);
     }
 }

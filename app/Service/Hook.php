@@ -9,11 +9,7 @@ use Illuminate\Support\Str;
 
 class Hook
 {
-    private $config;
-
-    //private $provider;
-
-    private $driver;
+    private $provider;
 
     private static $providers = [
         'gitee' => GiteeService::class,
@@ -44,15 +40,12 @@ class Hook
     public function handel($event, $param)
     {
         $method = Str::camel($event);
+        //验证
 
 
-        $res = $this->{$method}($param);
+        $res = $this->{$method}($param, '/wwww/sss');
 
         // 这里可以加推送
-        (new PushDeer())->push($method, $param);
-
-        return $res;
+        return (new PushDeer())->push($method, $param, array_search($this->provider, self::$providers));
     }
-
-
 }
