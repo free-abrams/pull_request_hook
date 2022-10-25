@@ -15,58 +15,40 @@ class GiteeMessageService
         'merge' => '合并分支',
     ];
 
-    public function getAuth($event, $param)
-    {
-        if ($event === 'pushHook') {
-            return $param['pusher']['name'];
-        }
-        if ($event === 'mergeRequestHook') {
-            return $param['pusher']['name'];
-        }
-        return '';
-    }
-
-    public function getRef($event, $param)
-    {
-        if ($event === 'pushHook') {
-            return $param['ref'];
-        }
-        if ($event === 'mergeRequestHook') {
-            return $param['pusher']['name'];
-        }
-        return '';
-    }
-
-    public function getCreatedAt($event, $param): string
-    {
-        $time = '';
-        if ($event === 'pushHook') {
-            $time =  $param['repository']['created_at'];
-        }
-        if ($event === 'mergeRequestHook') {
-            $time = $param['repository']['created_at'];
-        }
-
-        $time = new Carbon($time);
-        return $time->diffForHumans();
-    }
+    private $hook_name = [
+        'push_hooks' => '推送',
+        'tag_push_hooks' => '推送标签'
+    ];
 
     public function handel($event, $param)
     {
 
     }
 
-    private function push()
+    public function pushHooks($param): array
     {
+        $action = $this->hook_name[$param['hook_name']];
 
+        $project = $param['project']['full_name'];
+
+        $ref = $param['ref'];
+
+        $auth = $param['user_name'];
+
+        $time = Carbon::createFromTimestampMs($param['timestamp']);
+
+        return [
+            'title' => "{$action}[{$project}]，推送到分支[{$ref}]",
+            'desp' => "推送人：{$auth}\n于".$time->diffForHumans(),
+        ];
     }
 
-    public function tagPush()
+    public function tagPushHooks($param): array
     {
-
+        return $this->pushHooks($param);
     }
 
-    public function mergeRequestHooks($param)
+    public function mergeRequestHooks($param): array
     {
         $action = $this->p_r_actions[$param['action']];
 

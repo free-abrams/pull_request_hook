@@ -2,19 +2,17 @@
 
 namespace App\Service;
 
-use App\Service\Gitee\GiteeMessageService;
-use App\Service\Github\GithubMessageService;
+use App\Service\Gitee\GiteeValidate;
 
-class Message
+class HookToken
 {
     private static $providers = [
-        'gitee' => GiteeMessageService::class,
-        'github' => GithubMessageService::class,
+        'gitee' => GiteeValidate::class,
     ];
 
     private $provider;
 
-    public function driver($name): Message
+    public function driver($name): HookToken
     {
         if (!array_key_exists($name, self::$providers)) {
             throw new \Exception('call undefined provider '.$name);
@@ -25,9 +23,9 @@ class Message
         return $this;
     }
 
-    public function handel($event, $param)
+    public function handel($key, $param)
     {
-        return $this->provider->{$event}($param);
+        return $this->provider->checkToken($key, $param);
     }
 
     public static function __callStatic($name, $arguments)

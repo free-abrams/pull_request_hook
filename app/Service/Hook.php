@@ -40,12 +40,22 @@ class Hook
     public function handel($event, $param)
     {
         $method = Str::camel($event);
-        //验证
-
+        //验证config有没有这个库
+        $key = 'hook.'.$param['project']['path_with_namespace'];
+        $config = config($key, null);
+        if (!$config) {
+            throw new \Exception('undefined ref');
+        }
+        //验证密钥
+        $res = (new HookToken())->driver(array_search($this->provider, self::$providers))->handel($config['token'], $param);
+        if (!$res) {
+            throw new \Exception('undefined token');
+        }
 
         $res = $this->{$method}($param, '/wwww/sss');
 
         // 这里可以加推送
-        return (new PushDeer())->push($method, $param, array_search($this->provider, self::$providers));
+        $presp = (new PushDeer())->push($method, $param, array_search($this->provider, self::$providers));
+        return $res;
     }
 }
