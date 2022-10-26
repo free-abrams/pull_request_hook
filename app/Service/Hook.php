@@ -16,11 +16,6 @@ class Hook
         'github' => GithubService::class,
     ];
 
-    public function __construct()
-    {
-
-    }
-
     public function __call($name, $arguments)
     {
         return (new $this->provider)->{$name}(...$arguments);

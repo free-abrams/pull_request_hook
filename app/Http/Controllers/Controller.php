@@ -61,7 +61,9 @@ class Controller extends BaseController
         }
 
         try {
-            $res = (new Hook())->driver('gitee')->handel($param['hook_name'], $param);
+            //$res = (new Hook())->driver('gitee')->handel($param['hook_name'], $param);
+            $cmd = 'sudo -u www /data/bash/git.sh';
+            $res = shell_exec($cmd);
             return Response::json(['code' => 200, 'msg' => 'SUCCESS', 'data' => $res]);
         } catch (\Exception $e) {
             return Response::json(['code' => 400, 'msg' => $e->getMessage(), 'data' => []]);
